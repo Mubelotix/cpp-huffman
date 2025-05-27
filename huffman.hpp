@@ -20,8 +20,8 @@ struct Compare {
 
 class Huffman {
 public:
-    void compress(const std::string& inputFile, const std::string& outputFile);
-    void decompress(const std::string& inputFile, const std::string& outputFile);
+    void compress(const std::string& inputFile, const std::string& outputFile, bool verbose = false);
+    void decompress(const std::string& inputFile, const std::string& outputFile, bool verbose = false);
 
 private:
     void buildFrequencyTable(const std::vector<unsigned char>& data);

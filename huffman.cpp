@@ -157,18 +157,14 @@ std::vector<unsigned char> Huffman::decode(const std::string& bitString) {
     return result;
 }
 
-void Huffman::compress(const std::string& inputFile, const std::string& outputFile) {
+void Huffman::compress(const std::string& inputFile, const std::string& outputFile, bool verbose) {
     // Read binary input
     std::ifstream in(inputFile, std::ios::binary);
     std::vector<unsigned char> data((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
     in.close();
 
     buildFrequencyTable(data);
-    printFrequencyTable();
-
     buildHuffmanTree();
-    printHuffmanTree();
-    printCodes();
 
     std::string encoded = encode(data);
 
@@ -186,9 +182,13 @@ void Huffman::compress(const std::string& inputFile, const std::string& outputFi
     }
     out.put(static_cast<char>(padding));
 
-    // Print padding information
-    std::cout << "Padding size: " << padding << " bits\n";
-    std::cout << "Table size: " << tableSize << " entries\n";
+    if (verbose) {
+        std::cout << "Padding size: " << padding << " bits\n";
+        std::cout << "Table size: " << tableSize << " entries\n";
+        printFrequencyTable();
+        printHuffmanTree();
+        printCodes();
+    }
 
     // Write encoded binary data
     for (size_t i = 0; i < encoded.size(); i += 8) {
@@ -200,7 +200,7 @@ void Huffman::compress(const std::string& inputFile, const std::string& outputFi
     deleteTree(root);
 }
 
-void Huffman::decompress(const std::string& inputFile, const std::string& outputFile) {
+void Huffman::decompress(const std::string& inputFile, const std::string& outputFile, bool verbose) {
     std::ifstream in(inputFile, std::ios::binary);
 
     // Read header
@@ -217,11 +217,6 @@ void Huffman::decompress(const std::string& inputFile, const std::string& output
 
     int padding = in.get();
 
-    // Print header information
-    std::cout << "Padding size: " << padding << " bits\n";
-    std::cout << "Table size: " << tableSize << " entries\n";
-    printFrequencyTable();
-
     // Read encoded content
     std::vector<unsigned char> bytes((std::istreambuf_iterator<char>(in)),
                                       std::istreambuf_iterator<char>());
@@ -235,8 +230,16 @@ void Huffman::decompress(const std::string& inputFile, const std::string& output
         bitString = bitString.substr(0, bitString.size() - padding);
 
     buildHuffmanTree();
-    printHuffmanTree();
-    printCodes();
+
+    if (verbose) {
+        std::cout << "Padding size: " << padding << " bits\n";
+        std::cout << "Table size: " << tableSize << " entries\n";
+
+        printFrequencyTable();
+        printHuffmanTree();
+        printCodes();
+    }
+
     std::vector<unsigned char> decoded = decode(bitString);
 
     std::ofstream out(outputFile, std::ios::binary);
