@@ -7,13 +7,13 @@
 #include <iomanip>
 #include <algorithm>
 
-Node::Node(unsigned char b, int f, Node* l, Node* r)
-    : byte(b), freq(f), left(l), right(r) {}
+Node::Node(unsigned char b, int f, int id, Node* l, Node* r)
+    : byte(b), freq(f), left(l), right(r), id(id) {}
 
 bool Compare::operator()(Node* a, Node* b) {
     if (a->freq != b->freq)
         return a->freq > b->freq;
-    return a->byte > b->byte;
+    return a->id > b->id; // Use id for tie-breaking
 }
 
 void Huffman::buildFrequencyTable(const std::vector<unsigned char>& data) {
@@ -22,15 +22,16 @@ void Huffman::buildFrequencyTable(const std::vector<unsigned char>& data) {
 }
 
 void Huffman::buildHuffmanTree() {
+    int nodeCounter = 0;
     std::priority_queue<Node*, std::vector<Node*>, Compare> pq;
     for (auto& [b, f] : freqTable) {
-        pq.push(new Node(b, f));
+        pq.push(new Node(b, f, nodeCounter++));
     }
 
     while (pq.size() > 1) {
         Node* l = pq.top(); pq.pop();
         Node* r = pq.top(); pq.pop();
-        pq.push(new Node(0, l->freq + r->freq, l, r));
+        pq.push(new Node(0, nodeCounter++, l->freq + r->freq, l, r));
     }
 
     root = pq.top();

@@ -1,6 +1,7 @@
 #ifndef HUFFMAN_HPP
 #define HUFFMAN_HPP
 
+#include <map>
 #include <unordered_map>
 #include <vector>
 #include <queue>
@@ -11,7 +12,8 @@ struct Node {
     int freq;
     Node* left;
     Node* right;
-    Node(unsigned char b, int f, Node* l = nullptr, Node* r = nullptr);
+    int id;
+    Node(unsigned char b, int f, int id, Node* l = nullptr, Node* r = nullptr);
 };
 
 struct Compare {
@@ -36,7 +38,7 @@ private:
     std::string encode(const std::vector<unsigned char>& data);
     std::vector<unsigned char> decode(const std::string& bitString);
 
-    std::unordered_map<unsigned char, int> freqTable;
+    std::map<unsigned char, int> freqTable;
     std::unordered_map<unsigned char, std::string> codes;
     std::unordered_map<std::string, unsigned char> reverseCodes;
     Node* root = nullptr;
