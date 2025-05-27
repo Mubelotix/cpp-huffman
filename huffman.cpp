@@ -31,7 +31,7 @@ void Huffman::buildHuffmanTree() {
     while (pq.size() > 1) {
         Node* l = pq.top(); pq.pop();
         Node* r = pq.top(); pq.pop();
-        pq.push(new Node(0, nodeCounter++, l->freq + r->freq, l, r));
+        pq.push(new Node(0, l->freq + r->freq, nodeCounter++, l, r));
     }
 
     root = pq.top();
