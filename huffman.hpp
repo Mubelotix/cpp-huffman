@@ -25,12 +25,11 @@ public:
 
 private:
     void buildFrequencyTable(const std::vector<unsigned char>& data);
-    void printFrequencyTable() const;
-
     void buildHuffmanTree();
-    void printHuffmanTree() const;
-
     void buildCodes(Node* node, const std::string& code);
+    
+    void printFrequencyTable() const;
+    void printHuffmanTree() const;
     void printCodes() const;
 
     void deleteTree(Node* node);

@@ -1,1 +1,1 @@
-g++ -std=c++17 -o HuffmanCompressor main.cpp huffman.cpp
+g++ -std=c++17 -o HuffmanCompressor main.cpp huffman.cpp logs.cpp
